@@ -1,0 +1,60 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Result Graph</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+	</head>
+	<body>
+		<canvas id="createCurrYearHccGapChart" height="140" width="500px;"></canvas>
+	<script>
+    var value_result = 	JSON.parse('{{ value_result | escapejs }}')
+    console.log(value_result["air_humid_max"])
+
+		var chartData = {
+			type: 'horizontalBar',
+			data: {
+                labels: ['ความชื้นอากาศ'],
+                datasets: [{
+                    label: "ความชื้นต่ำสุด",
+                    backgroundColor: '#cc3399',
+                    data: [value_result["air_humid_min"]]
+                }, {
+                    label: "ความชื้นเฉลี่ย",
+                    backgroundColor: '#0099ff',
+                    data: [value_result["air_humid_avg"]]
+                }, {
+                    label: "ความชื้นสูงสุด",
+                    backgroundColor: '#0022ff',
+                    data: [value_result["air_humid_max"]]
+                }]
+                },
+                options: {
+                    responsive: false,
+                    legend: {
+                        display: false
+                    },
+                    scales: {
+                        yAxes: [{
+                            stacked: true
+                        }],
+                       
+                    },
+                
+                }
+            }
+
+        var canvas = document.getElementById('createCurrYearHccGapChart');
+        var myChart = new Chart(canvas, chartData);
+        
+        canvas.onclick = function(evt) {
+           var activePoint = myChart.getElementAtEvent(evt)[0];
+           var data = activePoint._chart.data;
+           var datasetIndex = activePoint._datasetIndex;
+           var label = data.datasets[datasetIndex].label;
+           var value = data.datasets[datasetIndex].data[activePoint._index];
+           console.log(label, value);
+        };
+	</script>
+	</body>
+</html>

@@ -1,0 +1,44 @@
+{% load staticfiles %}
+<div class="sidebar-header">
+    <h3>
+        <center><img src="{% static "assets/images/Picture1.png" %}" alt="homepage" class="light-logo"
+                style="width: 80%;" /></center>
+    </h3>
+    <strong>
+        <center><img src="{% static "assets/images/Picture1.png" %}" alt="homepage" class="light-logo"
+                style="width: 100%;" /></center>
+    </strong>
+</div>
+
+<ul class="list-unstyled components">
+
+    <li id="home_li">
+        <a href="/">
+            <i class="fas fa-home"></i>
+            หน้าหลัก
+        </a>
+    </li>
+
+    <li id="graph_li">
+        <a href="/graph">
+            <i class="fas fa-chart-bar"></i>
+            แผนภูมิ
+        </a>
+    </li>
+
+
+    <li class="sidebar-item"> <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false"
+            class="dropdown-toggle"><i class="fas fa-user"></i><span class="hide-menu"> ตั้งค่าผู้ใช้งาน </span></a>
+        <ul id="homeSubmenu" class="collapse list-unstyled">
+            <li class="sidebar-item" data-toggle="modal" data-target="#change-email"><a href="#" class="sidebar-link"><i
+                        class="fas fa-envelope"></i><span class="hide-menu"> แก้ไขอีเมล์ </span></a></li>
+            <li class="sidebar-item" data-toggle="modal" data-target="#change-password"><a href="#"
+                    class="sidebar-link"><i class="fas fa-key"></i><span class="hide-menu"> แก้ไขรหัสผ่าน </span></a>
+            </li>
+        </ul>
+    </li>
+    <li class="sidebar-item" data-toggle="modal" data-target="#logout-modal"> <a
+        class="sidebar-link waves-effect waves-dark sidebar-link" href="#" aria-expanded="false"><i
+            class="fas fa-sign-out-alt"></i><span class="hide-menu"> ออกจากระบบ</span></a></li>
+
+</ul>

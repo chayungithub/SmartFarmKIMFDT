@@ -1,0 +1,348 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static "assets/images/Picture4.png" %}">
+    <title>หน้าหลัก</title>
+    <!-- Custom CSS -->
+    <link href="{% static "assets/libs/flot/css/float-chart.css" %}" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{% static "css/style.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/button.css" %}" rel="stylesheet">
+    <link href="{% static "css/main.css" %}" rel="stylesheet">
+
+    <!--<link href="{% static "css/bootstrap3-3-7/bootstrap.css" %}" rel="stylesheet">-->
+    <!--<link href="{% static "css/bootstrap3-3-7/bootstrap-theme.css" %}" rel="stylesheet">-->
+    <link href="{% static "css/datepicker/bootstrap-datepicker.css" %}" rel="stylesheet">
+    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="{% static  "js/raphael-2.1.4.min.js" %}"></script>
+    <script src="{% static  "js/justgage.js" %}"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
+
+    <link href="{% static "css/style4.css" %}" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="preloader">
+        <div class="lds-ripple">
+            <div class="lds-pos"></div>
+            <div class="lds-pos"></div>
+        </div>
+    </div>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            {% include "subtemp/sidebar_menu.html" %}
+        </nav>
+        <!-- Page Content  -->
+        <div id="content">
+          <nav class="navbar navbar-expand-lg navbar-light bg-light">
+              <button type="button" id="sidebarCollapse" class="btn">
+                <i class="fas fa-align-left"></i>
+              </button>
+              <h2 style="padding-left: 2em;"><span>สถานีตรวจวัดสภาพอากาศ</span></h2>
+          </nav>
+          <div class="row">
+            <div class="col-12 col-sm-12">
+                <div class="card">
+                    {% include "subtemp/gauges.html" %}
+                </div>
+                <div class="col-12 col-sm-12" style="padding:0;">
+                    {% include "subtemp/stats.html" %}
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="modal fade" id="logout-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">ยืนยันการออกจากระบบ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    คุณต้องการออกจากระบบ ใช่หรือไม่ ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+                    <form action="/logout/" method="POST">
+                        <input type="submit" id="submit-logout" class="btn btn-success" value="ตกลง">
+                        {% csrf_token %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "subtemp/user_modals.html" %}
+
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="{% static "js/main.js" %}"></script>
+    <script src="{% static "assets/libs/jquery/dist/jquery.min.js" %}"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="{% static "assets/libs/popper.js/dist/umd/popper.min.js" %}"></script>
+    <script src="{% static "assets/libs/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+    <script src="{% static "assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js" %}"></script>
+    <script src="{% static "assets/extra-libs/sparkline/sparkline.js" %}"></script>
+    <!--Menu sidebar -->
+    <script src="{% static "js/sidebarmenu.js" %}"></script>
+    <!--Custom JavaScript -->
+    <script src="{% static "js/custom.min.js" %}"></script>
+    <!-- datepicker -->
+    <!--<script src="{% static "js/bootstrap3-3-7/bootstrap.js" %}"></script>-->
+    <script src="{% static "js/datepicker/bootstrap-datepicker-custom.js" %}"></script>
+    <script src="{% static "js/bootstrap-datepicker.th.min.js" %}" charset="UTF-8"></script>
+    <!-- microgear -->
+    <script src="https://cdn.netpie.io/microgear.js"></script>
+    <script src="{% static "js/config_firebase.js" %}"></script>
+
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>-->
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+        integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+        crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+        integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+        crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+    </script>
+
+    <script>
+
+        const APPID = "ValveSmartFarm";
+        const KEY = "MJjliNMzT6ERVhJ";
+        const SECRET = "KnHKiImxu4ME4M2mClrwpiFjB";
+
+        const ALIAS = "LekoSmartFarmServer";
+        const thing1 = "LekoSmartFarmNode";
+
+        function switchPress1(logic) {
+            if (logic == '1') {
+                microgear.chat(thing1, "ON1");
+            } else if (logic == '0') {
+                microgear.chat(thing1, "OFF1");
+            }
+        }
+        function switchPress2(logic) {
+            if (logic == '1') {
+                microgear.chat(thing1, "ON2");
+            } else if (logic == '0') {
+                microgear.chat(thing1, "OFF2");
+            }
+        }
+
+        var microgear = Microgear.create({
+            key: KEY,
+            secret: SECRET,
+            alias: ALIAS
+        });
+
+        microgear.on('message', function (topic, data) {
+            if (data == "ON1") {
+                status = "on";
+                v = '1';
+                $("#led1").css("background-color", "#0F0");
+                $("#sensor_control").attr("aria-pressed", "true")
+                document.getElementById("sensor_control").classList.add('active');
+            } else if (data == "OFF1") {
+                status = "off";
+                v = '1';
+                $("#led1").css("background-color", "#080");
+                $("#sensor_control").attr("aria-pressed", "false")
+                document.getElementById("sensor_control").classList.remove('active');
+            }
+            else if (data == "ON2") {
+                status = "on";
+                v = '2';
+                $("#led2").css("background-color", "#0F0");
+                $("#sensor_control2").attr("aria-pressed", "true")
+                document.getElementById("sensor_control2").classList.add('active');
+            }
+            else if (data == "OFF2") {
+                status = "off";
+                v = '2';
+                $("#led2").css("background-color", "#080");
+                $("#sensor_control2").attr("aria-pressed", "false")
+                document.getElementById("sensor_control2").classList.remove('active');
+            }
+            $.ajax({
+                url: '/valve_state/',
+                data: {
+                    'valve': v,
+                    'status': status
+                },
+                dataType: 'json'
+            });
+        });
+
+        microgear.on('connected', function () {
+            microgear.setAlias(ALIAS);
+        });
+
+        microgear.on('present', function (event) {
+            console.log(event);
+            if (event.alias == "LekoSmartFarmNode") {
+                if (event.type == "online") {
+                    document.getElementById("nodestate").innerHTML = "สถานะ : พร้อมใช้งาน";
+                } else if (event.type == "offline") {
+                    document.getElementById("nodestate").innerHTML = "สถานะ : ยังไม่พร้อมใช้งาน";
+                }
+            }
+        });
+
+        microgear.on('absent', function (event) {
+            console.log(event);
+        });
+
+        microgear.resettoken(function (err) {
+            microgear.connect(APPID);
+        });
+
+        $(document).ready(function () {
+            var status
+            $('#sensor_control').click(function () {
+                if ($(this).attr("aria-pressed") == 'true') {
+                    switchPress1(0);
+                } else {
+                    switchPress1(1);
+                }
+            });
+            $('#sensor_control2').click(function () {
+                if ($(this).attr("aria-pressed") == 'true') {
+                    switchPress2(0);
+                } else {
+                    switchPress2(1);
+                }
+            });
+            $(".plant-item").click(function () {
+                $("#ch-plant").html($(this).attr("name"))
+                $("#ch-plant").val($(this).attr("name"))
+            })
+            $(".keep-plant-item").click(function () {
+                $("#ch-keep").html($(this).attr("name"))
+                $("#ch-keep").val($(this).attr("name"))
+            })
+            $(".sensor-item").click(function () {
+                $("#ch-sensor").html($(this).attr("name"))
+                $("#ch-sensor").val($(this).attr("name"))
+            })
+            $('.datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+                todayHighlight: true,
+                todayBtn: false,
+                language: 'th',
+                thaiyear: true
+            }).datepicker("setDate", "0");
+            $(".select-keep").click(function () {
+                $("#p_id").val($(this).val())
+            })
+            $("#submit-plant").click(function () {
+                $("#plant-type").val($("#ch-plant").val())
+                $("#start-plant-timestamp").val($("#inputdatepicker").val())
+                $("#sensor").val($("#ch-sensor").val())
+                $("#plant-form").submit()
+            })
+            $("#submit-keep").click(function () {
+                $("#keep-date").val($("#inputdatepicker-keep").val())
+                $("#keep-unit").val($("#ch-keep").val())
+                $("#keep-plant-form").submit()
+            })
+            $(".delete-plant-span").click(function () {
+                $(".delete-id").val($(this).attr("name"))
+            })
+            $(".submit-delete").click(function () {
+                $("#delete-form").submit()
+            })
+            document.getElementById("tab2").classList.remove('active');
+            document.getElementById("tab3").classList.remove('active');
+            document.getElementById("tab4").classList.remove('active');
+        });
+
+        if ("{{ state1 }}" == "false") {
+            $("#led1").css("background-color", "#080");
+        } else {
+            $("#led1").css("background-color", "#0F0");
+        }
+        if ("{{ state2 }}" == "false") {
+            $("#led2").css("background-color", "#080");
+        } else {
+            $("#led2").css("background-color", "#0F0");
+        }
+
+        firebase.initializeApp(config_firebase);
+        var database = firebase.database();
+
+        var a_air_humidity = "{{a_air_humidity}}"
+        var a_air_temperature = "{{a_air_temperature}}"
+        var a_soil_moisure = "{{a_pm25}}"
+        var a_soil_temperature = "{{a_light_intensity}}"
+
+        var sample = 1500
+
+        database.ref("A").orderByChild("time").limitToLast(sample).on("value", function (snapshot) {
+            var air_temperature_arr = []
+            var air_humidity_arr = []
+            var light_intensity_arr = []
+            var pm25_arr = []
+            snapshot.forEach(function (data) {
+                var data_val = data.val()
+                air_temperature_arr.push(data_val.data.air_temperature)
+                air_humidity_arr.push(data_val.data.air_humidity)
+                light_intensity_arr.push(data_val.data.light_intensity)
+                pm25_arr.push(data_val.data.pm25)
+            });
+
+            air_temperature_arr = air_temperature_arr.sort(function (a, b) { return a - b })
+            air_humidity_arr = air_humidity_arr.sort(function (a, b) { return a - b })
+            light_intensity_arr = light_intensity_arr.sort(function (a, b) { return a - b })
+            pm25_arr = pm25_arr.sort(function (a, b) { return a - b })
+            $("#air_temperature_avg").text((air_temperature_arr.reduce((previous, current) => current += previous) / air_temperature_arr.length).toFixed(1));
+            $("#air_temperature_max").text(air_temperature_arr[air_temperature_arr.length - 1].toFixed(1));
+            $("#air_temperature_min").text(air_temperature_arr[0].toFixed(1));
+            $("#air_humidity_avg").text((air_humidity_arr.reduce((previous, current) => current += previous) / air_humidity_arr.length).toFixed(1));
+            $("#air_humidity_max").text(air_humidity_arr[air_humidity_arr.length - 1].toFixed(1));
+            $("#air_humidity_min").text(air_humidity_arr[0].toFixed(1));
+            $("#light_intensity_avg").text((light_intensity_arr.reduce((previous, current) => current += previous) / light_intensity_arr.length).toFixed(1));
+            $("#light_intensity_max").text(light_intensity_arr[light_intensity_arr.length - 1].toFixed(1));
+            $("#light_intensity_min").text(light_intensity_arr[0].toFixed(1));
+            $("#pm25_avg").text((pm25_arr.reduce((previous, current) => current += previous) / pm25_arr.length).toFixed(1));
+            $("#pm25_max").text(pm25_arr[pm25_arr.length - 1].toFixed(1));
+            $("#pm25_min").text(pm25_arr[0].toFixed(1));
+        });
+        $("#home_li").addClass("active")
+
+    </script>
+    <script src="{% static "js/meter.js" %}"></script>
+    <script src="{% static "js/update_time.js" %}"></script>
+
+</body>
+
+</html>
+
+{% include "subtemp/extra_js.html" %}
+<script type="text/javascript" src="">
+    setSidebarActive(0)
+</script>

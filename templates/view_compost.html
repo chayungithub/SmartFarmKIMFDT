@@ -1,0 +1,190 @@
+{% load staticfiles %}
+{% include "subtemp/heads.html" %}   
+
+    <!-- ============================================================== -->
+    <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Page wrapper  -->
+    <!-- ============================================================== -->
+    <div class="page-wrapper">
+        <!-- ============================================================== -->
+        <!-- Bread crumb and right sidebar toggle -->
+        <!-- ============================================================== -->
+         <div class="page-breadcrumb">
+            <div class="row">
+                <div class="col-12 d-flex no-block align-items-center">
+                    <h4 class="page-title">ประวัติการใส่ปุ๋ย</h4>
+                    <div class="ml-auto text-right">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><i class="fa fa-plus"></i><a href= "#" data-toggle="modal" data-target="#add-compost"> ใส่ปุ๋ย</a></li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Bread crumb and right sidebar toggle -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
+            <!-- ============================================================== -->
+            <!-- Sales Cards  -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="table-responsive">
+                            <table id="zero_config" class="table table-plant">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>
+                                            <label class="customcheckbox m-b-20">
+                                                <input type="checkbox" id="mainCheckbox" />
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </th>
+                                        <th scope="col">ครั้งที่</th>
+                                        <th scope="col">วันที่</th>
+                                        <th scope="col">ชนิด</th>
+                                        <th scope="col">จำนวน</th>
+                                        <th scope="col">แก้ใข</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="customtable">
+                                    {% for c in compost %}
+                                    <tr>
+                                        <th>
+                                            <label class="customcheckbox">
+                                                <input type="checkbox" id="compost-edit-cb-{{ c.id }}" class="listCheckbox compost-edit-cb" value="{{ c.id }}" />
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </th>
+                                        <td>{{ c.number }}</td>
+                                        <td>{{ c.date }}</td>
+                                        <td>{{ c.type }}</td>
+                                        <td>{{ c.totals }}</td>
+                                        <td><a class="show_edit" name="{{ c.number }}" href="#">แก้ไข</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <button id="delete-bar-2" data-toggle="modal" data-target="#delete-compost" class="btn btn-danger delete-bar">ลบข้อมูล</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Container fluid  -->
+        <!-- ============================================================== -->
+        
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Page wrapper  -->
+    <!-- ============================================================== -->
+    <div style="height: 50px" class="mobileindex"></div>
+    <div id="delete-bar-1" class="delete-bar" data-toggle="modal" data-target="#delete-modal">
+        ลบข้อมูล
+        <form id="delete-form" action="/plant/delete_compost/" method="post">
+            <input type="hidden" name="delete-ids" id="delete-ids" value="[]" >
+            <input type="hidden" name="p_id" id="p_id" value="{{ plant.id }}" >
+            {% csrf_token %}
+        </form>
+    </div>
+    
+{% include "subtemp/ends.html" %}  
+    
+<script>
+    
+    $(document).ready(function(){
+        if($(".compost-edit-cb").length > 0){
+            shift_delete = function(){
+                var cbs = $(".compost-edit-cb")
+                var n_checked = 0
+                for(var p = 0; p < cbs.length; p++){
+                    n_checked += cbs[p].checked
+                }
+                if(window.innerWidth <= 767){
+                    if(n_checked > 0){
+                        $("#delete-bar-1").css({top: window.innerHeight - 60, height: 60})
+                    }else{
+                        $("#delete-bar-1").css({top: window.innerHeight})
+                    }
+                }else{
+                    if(n_checked > 0){
+                        $("#delete-bar-2").css({height: 50})
+                    }else{
+                        $("#delete-bar-2").css({height: 0})
+                    }
+                    $("#delete-bar-2").css({display: "block"})
+                }
+                console.log($("#delete-bar-2"))
+            }
+            $(".compost-edit-cb").click(shift_delete)
+            $("#mainCheckbox").click(shift_delete)
+        }
+        $(".delete-bar").click(function(){
+            var cbs = $(".compost-edit-cb")
+            remove_list = []
+            for(var p = 0; p < cbs.length; p++){
+                if(cbs[p].checked){
+                    remove_list.push(cbs[p].value)
+                }
+            }
+            $("#delete-ids").val(JSON.stringify(remove_list))
+        })
+        $(".submit-delete").click(function(){
+            $("#delete-form").submit()
+        })
+        $(".show_edit").click(function(){
+            c_id = parseInt($(this).attr("name"))-1
+            compost = JSON.parse("{{ c_js | escapejs }}");
+            $("#ch-compost2").html(compost[c_id].type)
+            $("#ch-compost2").val(compost[c_id].type)
+            $("#compost-total2").val(compost[c_id].total)
+            $("#ch-add-compost2").html(compost[c_id].unit)
+            $("#ch-add-compost2").val(compost[c_id].unit)
+            $("#inputdatepicker-compost2").val(compost[c_id].date)
+            
+            $("#c_id").val(compost[c_id].id)
+            
+            $("#edit-compost").modal('show');
+        })
+        $(".compost-item").click(function(){
+            $("#ch-compost").html($(this).text())
+            $("#ch-compost").val($(this).attr("name"))
+            $("#ch-compost2").html($(this).text())
+            $("#ch-compost2").val($(this).attr("name"))
+        })
+        $(".add-compost-item").click(function(){
+            $("#ch-add-compost").html($(this).text())
+            $("#ch-add-compost").val($(this).attr("name"))
+            $("#ch-add-compost2").html($(this).text())
+            $("#ch-add-compost2").val($(this).attr("name"))
+        })
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            todayHighlight: true,
+            todayBtn: false,
+            language: 'th', 
+            thaiyear: true              
+        }).datepicker("setDate", "0");
+        $("#submit-compost1").click(function(){
+            $("#compost-date").val($("#inputdatepicker-compost").val())
+            $("#compost-type").val($("#ch-compost").val())
+            $("#compost-unit").val($("#ch-add-compost").val())
+            $("#compost-form-add").submit()
+        })
+        $("#submit-compost2").click(function(){
+            $("#compost-date2").val($("#inputdatepicker-compost2").val())
+            $("#compost-type2").val($("#ch-compost2").val())
+            $("#compost-unit2").val($("#ch-add-compost2").val())
+            $("#compost-form-edit").submit()
+        })
+    })
+</script>

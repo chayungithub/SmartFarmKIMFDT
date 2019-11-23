@@ -1,0 +1,364 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static "assets/images/Picture4.png" %}">
+    <title>Meter</title>
+    <!-- Custom CSS -->
+    <link href="{% static "assets/libs/flot/css/float-chart.css" %}" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{% static "css/style.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/button.css" %}" rel="stylesheet">
+    <link href="{% static "css/main.css" %}" rel="stylesheet">
+
+    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js"></script>
+    <script src="{% static  "js/raphael-2.1.4.min.js" %}"></script>
+    <script src="{% static  "js/justgage.js" %}"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
+
+</head>
+
+<body>
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <div class="lds-ripple">
+            <div class="lds-pos"></div>
+            <div class="lds-pos"></div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div id="main-wrapper">
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        <header class="topbar" data-navbarbg="skin5">
+            <nav class="navbar top-navbar navbar-expand-md navbar-dark">
+                <div class="navbar-header" data-logobg="skin5">
+                    <!-- This is for the sidebar toggle which is visible on mobile only -->
+                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
+                    <!-- ============================================================== -->
+                    <!-- Logo -->
+                    <!-- ============================================================== -->
+                    <a  href = "/index/" class="navbar-brand" style="padding-right:17%;" >
+                        <!-- Logo icon -->
+                        <b class="logo-icon ">
+                            <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                            <!-- Dark Logo icon -->
+                            <img src="{% static "assets/images/Picture4.png" alt="homepage" %}" class="light-logo" />
+
+                        </b>
+                        <!--End Logo icon -->
+                         <!-- Logo text -->
+                        <span class="logo-text">
+                             <!-- dark Logo text -->
+                             <img src="{% static "assets/images/logoja-text.png" %}" alt="homepage" class="light-logo" />
+
+                        </span>
+                    </a>
+                    <!-- ============================================================== -->
+                    <!-- End Logo -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- Toggle which is visible on mobile only -->
+                    <!-- ============================================================== -->
+                    <!--<a class="topbartoggler d-block d-md-none waves-effect waves-light" href="/valve/">วาล์ว <i class="fas fa-tint"></i></a>-->
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Logo -->
+                <!-- ============================================================== -->
+                <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
+                    <!-- ============================================================== -->
+                    <!-- toggle and nav items -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav float-left mr-auto">
+                        <li class="nav-item d-none d-md-block"><a class="nav-link sidebartoggler waves-effect waves-light" href="javascript:void(0)" data-sidebartype="mini-sidebar"><i class="mdi mdi-menu font-24"></i></a></li>
+                    </ul>
+
+                </div>
+            </nav>
+        </header>
+        <!-- ============================================================== -->
+        <!-- End Topbar header -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <aside class="left-sidebar" data-sidebarbg="skin5">
+            <!-- Sidebar scroll-->
+            <div class="scroll-sidebar">
+                <!-- Sidebar navigation-->
+                <nav class="sidebar-nav">
+                    <ul id="sidebarnav" class="p-t-30">
+                        <li class="sidebar-item selected"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">หน้าหลัก</span></a></li>
+                        <!--<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/vegetables/view/" aria-expanded="false"><i class="fas fa-database"></i><span class="hide-menu">ข้อมูลพืชผล</span></a></li>-->
+                        <li class="sidebar-item bar-mobile "> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/graph/" aria-expanded="false"><i class="fas fa-chart-bar"></i><span class="hide-menu">กราฟ</span></a></li>
+                        <!--<li class="sidebar-item bar-mobile"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/history/" aria-expanded="false"><i class="fas fa-history"></i><span class="hide-menu">ประวัติ</span></a></li>-->
+                        <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fas fa-user"></i><span class="hide-menu">ตั้งค่าผู้ใช้งาน </span></a>
+                            <ul aria-expanded="false" class="collapse  first-level">
+                                <li class="sidebar-item" data-toggle="modal" data-target="#change-email"><a href="#" class="sidebar-link"><i class="fas fa-envelope"></i><span class="hide-menu"> แก้ไขอีเมลล์ </span></a></li>
+                                <li class="sidebar-item" data-toggle="modal" data-target="#change-password"><a href="#" class="sidebar-link"><i class="fas fa-key"></i><span class="hide-menu"> แก้ไขรหัสผ่าน </span></a></li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item" data-toggle="modal" data-target="#logout-modal" > <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#" aria-expanded="false" ><i class="fas fa-sign-out-alt"></i><span class="hide-menu">ออกจากระบบ</span></a></li>
+
+                    </ul>
+                </nav>
+                <!-- End Sidebar navigation -->
+            </div>
+            <!-- End Sidebar scroll-->
+        </aside>
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper  -->
+        <!-- ============================================================== -->
+        <div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+             <div class="page-breadcrumb">
+                <div class="row">
+                    <div class="col-12 d-flex no-block align-items-center">
+                        <h4 class="page-title">เซ็นเซอร์</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Sales Cards  -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                        <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <!--<li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#tab1" role="tab"><span class="hidden-sm-up"></span> <span class="hidden-xs-down">ดาดฟ้า</span></a> </li>-->
+                                <!--<li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab2" role="tab"><span class="hidden-sm-up"></span> <span class="hidden-xs-down">ตู้คอนโทรล</span></a> </li>-->
+                                <!--<li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab3" role="tab"><span class="hidden-sm-up"></span> <span class="hidden-xs-down">ตู้กลางแปลง</span></a> </li>-->
+                                <!--<li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab4" role="tab"><span class="hidden-sm-up"></span> <span class="hidden-xs-down">ตู้ต้นแปลง</span></a> </li>-->
+                            </ul>
+                            <!-- Tab panes -->
+                             <div class="tab-content tabcontent-border">
+                                <div class="tab-pane active" id="tab1" role="tabpanel">
+                                    <p id = "updated_time_x" style = "margin: 10px 15px; text-align:center">อัพเดตเวลาล่าสุด : {{x_time}}</p>
+                                    <div class="box bg-white text-center">
+                                        <div class="row">
+                                            <div class="col-md-3 col-sm-6">
+                                                <h4 class="card-title">อุณหภูมิ(อากาศ)</h4>
+                                                <div id="a_air_temperature" class="gauge" style="width:250px;"></div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h4 class="card-title">ความชื้น(อากาศ)</h4>
+                                                <div id="a_air_humidity" class="gauge" style="width:250px"></div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h4 class="card-title">ความเข้มแสง</h4>
+                                                <div id="a_soil_temperature" class="gauge" style="width:250px"></div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h4 class="card-title">PM 2.5</h4>
+                                                <div id="a_soil_moisure" class="gauge" style="width:250px"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<div class="tab-pane active" id="tab2" role="tabpanel">-->
+                                <!--    <p id = "updated_time_a" style = "margin: 10px 15px; text-align:center">อัพเดตเวลาล่าสุด : {{a_time}}</p>-->
+                                <!--    <div class="box bg-white text-center">-->
+                                <!--        <div class="row">-->
+                                <!--            <div class="col-md-3">-->
+                                <!--                <h4 class="card-title">อุณหภูมิ(อากาศ)</h4>-->
+                                <!--                <div id="a_air_temperature" class="gauge" style="width:250px"></div>-->
+                                <!--            </div>-->
+                                <!--            <div class="col-md-3">-->
+                                <!--                <h4 class="card-title">ความชื้น(อากาศ)</h4>-->
+                                <!--                <div id="a_air_humidity" class="gauge" style="width:250px"></div>-->
+                                <!--            </div>-->
+                                <!--            <div class="col-md-3">-->
+                                <!--                <h4 class="card-title">อุณหภูมิ(ดิน)</h4>-->
+                                <!--                <div id="a_soil_temperature" class="gauge" style="width:250px"></div>-->
+                                <!--            </div>-->
+                                <!--            <div class="col-md-3">-->
+                                <!--                <h4 class="card-title">ความชื้น(ดิน)</h4>-->
+                                <!--                <div id="a_soil_moisure" class="gauge" style="width:250px"></div>-->
+                                <!--            </div>-->
+                                <!--        </div>-->
+                                <!--    </div>-->
+                                <!--</div>-->
+                                <!--<div class="tab-pane active" id="tab3" role="tabpanel">-->
+                                <!--    <p id = "updated_time_b" style = "margin: 10px 15px; text-align:center">อัพเดตเวลาล่าสุด : {{b_time}}</p>-->
+                                <!--    <div class="box bg-white text-center">-->
+                                <!--        <div class="row">-->
+                                <!--            <div class="col-md-3">-->
+                                <!--                <h4 class="card-title">อุณหภูมิ(อากาศ)</h4>-->
+                                <!--                <div id="b_air_temperature" class="gauge" style="width:250px"></div>-->
+                                <!--            </div>-->
+                                <!--            <div class="col-md-3">-->
+                                <!--                <h4 class="card-title">ความชื้น(อากาศ)</h4>-->
+                                <!--                <div id="b_air_humidity" class="gauge" style="width:250px"></div>-->
+                                <!--            </div>-->
+                                <!--            <div class="col-md-3">-->
+                                <!--                <h4 class="card-title">อุณหภูมิ(ดิน)</h4>-->
+                                <!--                <div id="b_soil_temperature" class="gauge" style="width:250px"></div>-->
+                                <!--            </div>-->
+                                <!--            <div class="col-md-3">-->
+                                <!--                <h4 class="card-title">ความชื้น(ดิน)</h4>-->
+                                <!--                <div id="b_soil_moisure" class="gauge" style="width:250px"></div>-->
+                                <!--            </div>-->
+                                <!--        </div>-->
+                                <!--    </div>-->
+                                <!--</div>-->
+                                <!--<div class="tab-pane active" id="tab4" role="tabpanel">-->
+                                <!--    <p id = "updated_time_c" style = "margin: 10px 15px; text-align:center">อัพเดตเวลาล่าสุด : {{c_time}}</p>-->
+                                <!--    <div class="box bg-white text-center">-->
+                                <!--        <div class="row">-->
+                                <!--            <div class="col-md-3">-->
+                                <!--                <h4 class="card-title">อุณหภูมิ(อากาศ)</h4>-->
+                                <!--                <div id="c_air_temperature" class="gauge" style="width:250px"></div>-->
+                                <!--            </div>-->
+                                <!--            <div class="col-md-3">-->
+                                <!--                <h4 class="card-title">ความชื้น(อากาศ)</h4>-->
+                                <!--                <div id="c_air_humidity" class="gauge" style="width:250px"></div>-->
+                                <!--            </div>-->
+                                <!--            <div class="col-md-3">-->
+                                <!--                <h4 class="card-title">อุณหภูมิ(ดิน)</h4>-->
+                                <!--                <div id="c_soil_temperature" class="gauge" style="width:250px"></div>-->
+                                <!--            </div>-->
+                                <!--            <div class="col-md-3">-->
+                                <!--                <h4 class="card-title">ความชื้น(ดิน)</h4>-->
+                                <!--                <div id="c_soil_moisure" class="gauge" style="width:250px"></div>-->
+                                <!--            </div>-->
+                                <!--        </div>-->
+                                <!--    </div>-->
+                                <!--</div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page wrapper  -->
+        <!-- ============================================================== -->
+        <div style="height: 50px" class="mobileindex"></div>
+        <footer class="footbar">
+            <div class="row">
+                <!-- Column -->
+
+                <!--<div class="col-3">-->
+                <!--    <a href="/index/">-->
+                <!--    <div class="boxs text-center">-->
+                <!--        <h4><i class="fas fa-seedling"></i></h4>-->
+                <!--        <h6>พืชผล</h6>-->
+                <!--    </div>-->
+                <!--    </a>-->
+                <!--</div>-->
+                 <!-- Column -->
+                <div class="col-3">
+                    <!--<a href="/control/">-->
+                        <div class="boxs text-center now">
+                            <h4><i class="fas fa-thermometer-half"></i></h4>
+                            <h6>เซ็นเซอร์</h6>
+                        </div>
+                    <!--</a>-->
+                </div>
+                <!-- Column -->
+                <!--<div class="col-3">-->
+                <!--    <a href="/history/">-->
+                <!--        <div class="boxs text-center">-->
+                <!--            <h4><i class="fas fa-history"></i></h4>-->
+                <!--            <h6>ประวัติ</h6>-->
+                <!--        </div>-->
+                <!--    </a>-->
+                <!--</div>-->
+                 <!-- Column -->
+                <div class="col-3">
+                    <a href="/graph/">
+                        <div class="boxs text-center" href="#">
+                            <h4><i class="fas fa-chart-bar"></i></h4>
+                            <h6>กราฟ</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+
+
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="{% static "assets/libs/jquery/dist/jquery.min.js" %}"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="{% static "assets/libs/popper.js/dist/umd/popper.min.js" %}"></script>
+    <script src="{% static "assets/libs/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+    <script src="{% static "assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js" %}"></script>
+    <script src="{% static "assets/extra-libs/sparkline/sparkline.js" %}"></script>
+    <!--Menu sidebar -->
+    <script src="{% static "js/sidebarmenu.js" %}"></script>
+    <!--Custom JavaScript -->
+    <script src="{% static "js/custom.min.js" %}"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
+    <script src="{% static "js/config_firebase.js" %}"></script>
+    <script>
+        $(document).ready(function () {
+            document.getElementById("tab2").classList.remove('active');
+            document.getElementById("tab3").classList.remove('active');
+            document.getElementById("tab4").classList.remove('active');
+        });
+
+        firebase.initializeApp(config_firebase);
+        var database = firebase.database();
+
+        // var x_air_humidity = "{{x_air_humidity}}"
+        // var x_air_temperature = "{{x_air_temperature}}"
+        // var x_soil_moisure = "{{x_soil_moisure}}"
+        // var x_soil_temperature = "{{x_soil_temperature}}"
+
+        var a_air_humidity = "{{a_air_humidity}}"
+        var a_air_temperature = "{{a_air_temperature}}"
+        var a_soil_moisure = "{{a_soil_moisure}}"
+        var a_soil_temperature = "{{a_soil_temperature}}"
+
+        // var b_air_humidity = "{{b_air_humidity}}"
+        // var b_air_temperature = "{{b_air_temperature}}"
+        // var b_soil_moisure = "{{b_soil_moisure}}"
+        // var b_soil_temperature = "{{b_soil_temperature}}"
+
+        // var c_air_humidity = "{{c_air_humidity}}"
+        // var c_air_temperature = "{{c_air_temperature}}"
+        // var c_soil_moisure = "{{c_soil_moisure}}"
+        // var c_soil_temperature = "{{c_soil_temperature}}"
+    </script>
+    <script src="{% static "js/update_time.js" %}"></script>
+    <script src="{% static "js/meter.js" %}"></script>
+</body>
+
+</html>

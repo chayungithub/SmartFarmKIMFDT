@@ -1,0 +1,142 @@
+{% load staticfiles %}
+{% include "subtemp/heads.html" %}   
+<!-- ============================================================== -->
+<!-- End Left Sidebar - style you can find in sidebar.scss  -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- Page wrapper  -->
+<!-- ============================================================== -->
+<div class="page-wrapper">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+     <div class="page-breadcrumb">
+        <div class="row">
+            <div class="col-12 d-flex no-block align-items-center">
+                <h4 class="page-title">ประวัติการเพาะปลูก</h4>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container-fluid">
+        <!-- ============================================================== -->
+        <!-- Sales Cards  -->
+        <!-- ============================================================== -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <input type="text" style="width: calc(100% - 25px);" id="search_plant2" onkeyup="searchKeepPlant()" placeholder="ค้นหา">
+                    </div>
+                    <div class="comment-widgets scrollable" id="show-keep">
+                        {% if dataset|length == 0 %}
+                        <ul class="list-style-none">
+                            <li class="d-flex no-block flex-row comment-row card-body border-top">
+                                <i class="fas fa-box-open w-30px m-t-5"></i>
+                                <div>
+                                    <p class="m-b-0 font-medium p-0">ไม่มีรายการที่แสดง</p>
+                                </div>
+                            </li>
+                        </ul>
+                        
+                        {% else %}
+                        <ul class="list-style-none">
+                            <li class="no-block flex-row comment-row card-body border-top history-item">
+                                <i class="fas fa-leaf w-30px m-t-5 text-success"></i>
+                                <div>
+                                    <p class="m-b-0 font-medium p-0 plant-history">ทั้งหมด</p> 
+                                </div>
+                                <div class="ml-auto">
+                                    <div class="tetx-right" style="margin-bottom: 10px;">
+                                        <button type="button" class="btn btn-cyan btn-sm see-history" name="all">ดูข้อมูล</button> 
+                                    </div>
+                                </div>
+                            </li>
+                            {% for v in dataset %}
+                            <li class="no-block flex-row comment-row card-body border-top history-item" name="{{ v }}">
+                                <i class="fas fa-leaf w-30px m-t-5 text-success"></i>
+                                <div>
+                                    <p class="m-b-0 font-medium p-0 plant-history">{{ v }}</p> 
+                                </div>
+                                <div class="ml-auto">
+                                    <div class="tetx-right" style="margin-bottom: 10px;">
+                                        <button type="button" class="btn btn-cyan btn-sm see-history" name="{{ v }}">ดูข้อมูล</button> 
+                                    </div>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <form id="show-history-view" action="/view_history/" method="post">
+                            <input type="hidden" name="p_t" id="p_t" value="" >
+                            {% csrf_token %}
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Container fluid  -->
+    <!-- ============================================================== -->
+    
+</div>
+<!-- ============================================================== -->
+<!-- End Page wrapper  -->
+<!-- ============================================================== -->
+<div style="height: 50px" class="mobileindex"></div>
+<footer class="footbar">
+    <div class="row">
+        <!-- Column -->
+
+        <div class="col-3">
+            <a href="/index/">
+                <div class="boxs text-center">
+                    <h4><i class="fas fa-seedling"></i></h4>
+                    <h6>พืชผล</h6>
+                </div>
+            </a>
+        </div>
+         <!-- Column -->
+        <div class="col-3">
+            <a href="/control/">
+                <div class="boxs text-center">
+                    <h4><i class="fas fa-thermometer-half"></i></h4>
+                    <h6>เซ็นเซอร์</h6>
+                </div>
+            </a>
+        </div>
+        <!-- Column -->
+        <div class="col-3">
+            <!--<a href="history">-->
+                <div class="boxs text-center now">
+                    <h4><i class="fas fa-history"></i></h4>
+                    <h6>ประวัติ</h6>
+                </div>
+            <!--</a>-->
+        </div>
+         <!-- Column -->
+        <div class="col-3">
+            <a href="/graph/">
+                <div class="boxs text-center">
+                    <h4><i class="fas fa-chart-bar"></i></h4>
+                    <h6>กราฟ</h6>
+                </div>
+            </a>
+        </div>
+    </div>
+</footer>
+
+{% include "subtemp/ends.html" %}
+<script>
+    $(".see-history").click(function(){
+        $("#p_t").val($(this).attr("name"))
+        $("#show-history-view").submit()
+    })
+    setSidebarActive(3)
+</script>

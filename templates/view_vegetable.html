@@ -1,0 +1,148 @@
+{% load staticfiles %}
+{% include "subtemp/heads.html" %}    
+    <!-- ============================================================== -->
+    <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Page wrapper  -->
+    <!-- ============================================================== -->
+    <div class="page-wrapper">
+        <!-- ============================================================== -->
+        <!-- Bread crumb and right sidebar toggle -->
+        <!-- ============================================================== -->
+         <div class="page-breadcrumb">
+            <div class="row">
+                <div class="col-12 d-flex no-block align-items-center">
+                    <h4 class="page-title">พืชผล</h4>
+                    <div class="ml-auto text-right">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><i class="fa fa-plus"></i><a href= "/vegetables/new" > เพิ่มข้อมูลพืชผล</a></li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Bread crumb and right sidebar toggle -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
+            <!-- ============================================================== -->
+            <!-- Sales Cards  -->
+            <!-- ============================================================== -->
+            <div class="row">
+                
+                <div class="col-12">
+                    <div class="card">
+                        <h5 class="card-title"></h5>
+                        <input type="text" style="width: calc(100% - 25px);" id="search_plant" onkeyup="searchPlant()" placeholder="ค้นหา">
+                        <div class="table-responsive">
+                            <table id="zero_config" class="table table-plant">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>
+                                            <label class="customcheckbox m-b-20">
+                                                <input type="checkbox" id="mainCheckbox" />
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </th>
+                                        <th scope="col">ชนิด</th>
+                                        <th scope="col">ระยะเวลาในการปลูก</th>
+                                        <th scope="col">แก้ใข</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="customtable">
+                                    {% for v in vegs %}
+                                    <tr>
+                                        <th>
+                                            <label class="customcheckbox">
+                                                <input type="checkbox" id="plant-edit-cb-{{ v.pk }}" class="listCheckbox plant-edit-cb" value="{{ v.pk }}" />
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </th>
+                                        
+                                        <td>{{ v.type_name }}</td>
+                                        <td>{{ v.duration }} วัน</td>
+                                        <td><a href="/vegetables/edit/{{ v.pk }}">แก้ไข</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <button id="delete-bar-2" data-toggle="modal" data-target="#delete-modal" class="btn btn-danger delete-bar">ลบข้อมูล</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Container fluid  -->
+        <!-- ============================================================== -->
+        
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Page wrapper  -->
+    <!-- ============================================================== -->
+    <div style="height: 50px" class="mobileindex"></div>
+    <div id="delete-bar-1" class="delete-bar" data-toggle="modal" data-target="#delete-modal">
+        ลบข้อมูล
+        <form id="delete-form" action="/vegetables/delete/" method="post">
+            <input type="hidden" name="delete-ids" id="delete-ids" value="[]" >
+            {% csrf_token %}
+        </form>
+    </div>
+{% include "subtemp/ends.html" %}    
+    
+<script>
+    if(window.innerWidth > 767){
+        $('#zero_config').DataTable();
+    }
+    
+    $(document).ready(function(){
+        if($(".plant-edit-cb").length > 0){
+            shift_delete = function(){
+                var cbs = $(".plant-edit-cb")
+                var n_checked = 0
+                for(var p = 0; p < cbs.length; p++){
+                    n_checked += cbs[p].checked
+                }
+                if(window.innerWidth <= 767){
+                    if(n_checked > 0){
+                        $("#delete-bar-1").css({top: window.innerHeight - 60, height: 60})
+                    }else{
+                        $("#delete-bar-1").css({top: window.innerHeight})
+                    }
+                }else{
+                    if(n_checked > 0){
+                        $("#delete-bar-2").css({height: 50})
+                    }else{
+                        $("#delete-bar-2").css({height: 0})
+                    }
+                    $("#delete-bar-2").css({display: "block"})
+                }
+                console.log($("#delete-bar-2"))
+            }
+            $(".plant-edit-cb").click(shift_delete)
+            $("#mainCheckbox").click(shift_delete)
+        }
+        $(".delete-bar").click(function(){
+            var cbs = $(".plant-edit-cb")
+            remove_list = []
+            for(var p = 0; p < cbs.length; p++){
+                if(cbs[p].checked){
+                    remove_list.push(cbs[p].value)
+                }
+            }
+            $("#show-delete").html("คุณต้องการที่จะลบพืช "+remove_list.length+" ชนิด ใช่หรือไม่ ?")
+            $("#delete-ids").val(JSON.stringify(remove_list))
+        })
+        $(".submit-delete").click(function(){
+            $("#delete-form").submit()
+        })
+        console.log($("#zero_config_length"))
+    })
+</script>

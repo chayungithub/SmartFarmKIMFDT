@@ -1,0 +1,278 @@
+<div class="modal fade" id="logout-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ยืนยันการออกจากระบบ</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                คุณต้องการออกจากระบบ ใช่หรือไม่ ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+                <form action="/logout/" method="POST">
+                    <input type="submit" id="submit-logout" class="btn btn-success" value="ตกลง">
+                    {% csrf_token %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "subtemp/user_modals.html" %}
+
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ยืนยันการลบข้อมูล</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="show-delete">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+                <button type="button" id="submit-delete-veg" class="btn btn-success submit-delete">ตกลง</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-history" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ยืนยันการลบข้อมูล</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="show-delete2">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+                <button type="button" id="submit-delete-history" class="btn btn-success submit-delete">ตกลง</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-compost" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ยืนยันการลบข้อมูล</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="show-delete">
+                คุณต้องการลบข้อมูล ใช่หรือไม่ ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+                <button type="button" id="submit-delete-compost" class="btn btn-success submit-delete">ตกลง</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-plant" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ยืนยันการลบข้อมูล</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="show-delete">
+                คุณต้องการลบข้อมูล ใช่หรือไม่ ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+                <button type="button" id="submit-delete-plant" class="btn btn-success submit-delete">ตกลง</button>
+            </div>
+        </div>
+    </div>
+</div>
+    
+<!--history-->
+<div class="modal fade" id="compost-history" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ข้อมูลการใส่ปุ๋ย</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="show-compost-history">
+                <div class="table-responsive">
+                    <table class="table table-plant" id="show-compost-table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">ครั้งที่</th>
+                                <th scope="col">วันที่</th>
+                                <th scope="col">ชนิด</th>
+                                <th scope="col">จำนวน</th>
+                            </tr>
+                        </thead>
+                        <tbody class="customtable" >
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--popup add compost-->
+<div class="modal fade" id="add-compost" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ใส่ปุ๋ย</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="compost-form-add" action="/plant/compost/" method="post">
+                    <div class="row">
+                        <div class="col-4 text-right">
+                            <h5>ชนิดปุ๋ย:</h5>
+                        </div>
+                        <div class="col-8">
+                            <div class="btn-group">
+                                <button type="button" id="ch-compost" class="btn btn-primary dropdown-toggle compost-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="ชนิด A">ชนิด A</button>
+                                <ul class="dropdown-menu compost-dropdown-items">
+                                    <li><a class="dropdown-item compost-item" name="ชนิด A" href="#">ชนิด A</a></li>
+                                    <li><a class="dropdown-item compost-item" name="ชนิด B" href="#">ชนิด B</a></li>
+                                    <li><a class="dropdown-item compost-item" name="ชนิด C" href="#">ชนิด C</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    </br>
+                    <div class="row">
+                        <div class="col-4 text-right">
+                            <h5>จำนวนปุ๋ย:</h5>
+                        </div>
+                        <div class="col-4">
+                            <input class="form-control" name="compost-total" type="number">
+                        </div>
+                        <div class="col-4">
+                            <div class="btn-group">
+                                <button type="button" id="ch-add-compost" class="btn btn-primary dropdown-toggle compost-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="กิโลกรัม">กิโลกรัม</button>
+                                <ul class="dropdown-menu compost-dropdown-items">
+                                    <li><a class="dropdown-item add-compost-item" name="กิโลกรัม" href="#">กิโลกรัม</a></li>
+                                    <li><a class="dropdown-item add-compost-item" name="กรัม" href="#">กรัม</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    </br>
+                    <div class="row">
+                        <div class="col-4 text-right">
+                            <h5>วันที่ใส่ปุ๋ย:</h5>
+                        </div>
+                        <div class="col-8">
+                            <input id="inputdatepicker-compost" class="datepicker" data-date-format="dd/mm/yyyy" readonly>
+                        </div>
+                    </div>
+                    </br>
+                    <input type="hidden" name="p_id" value="{{ plant.pk }}" >
+                    <input type="hidden" id="compost-type" name="compost-type" value="" >
+                    <input type="hidden" id="compost-date" name="compost-date" value="" >
+                    <input type="hidden" id="compost-unit" name="compost-unit" value="" >
+                    {% csrf_token %}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+                <button type="button" id="submit-compost1"  class="btn btn-success">ตกลง</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--popup edit compost-->
+<div class="modal fade" id="edit-compost" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ใส่ปุ๋ย</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="compost-form-edit" action="/plant/edit_compost" method="post">
+                    <div class="row">
+                        <div class="col-4 text-right">
+                            <h5>ชนิดปุ๋ย:</h5>
+                        </div>
+                        <div class="col-8">
+                            <div class="btn-group">
+                                <button type="button" id="ch-compost2" class="btn btn-primary dropdown-toggle compost-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="ชนิด A">ชนิด A</button>
+                                <ul class="dropdown-menu compost-dropdown-items">
+                                    <li><a class="dropdown-item compost-item" name="ชนิด A" href="#">ชนิด A</a></li>
+                                    <li><a class="dropdown-item compost-item" name="ชนิด B" href="#">ชนิด B</a></li>
+                                    <li><a class="dropdown-item compost-item" name="ชนิด C" href="#">ชนิด C</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    </br>
+                    <div class="row">
+                        <div class="col-4 text-right">
+                            <h5>จำนวนปุ๋ย:</h5>
+                        </div>
+                        <div class="col-4">
+                            <input class="form-control" id="compost-total2" name="compost-total" type="number">
+                        </div>
+                        <div class="col-4">
+                            <div class="btn-group">
+                                <button type="button" id="ch-add-compost2" class="btn btn-primary dropdown-toggle compost-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="กิโลกรัม">กิโลกรัม</button>
+                                <ul class="dropdown-menu compost-dropdown-items">
+                                    <li><a class="dropdown-item add-compost-item" name="กิโลกรัม" href="#">กิโลกรัม</a></li>
+                                    <li><a class="dropdown-item add-compost-item" name="กรัม" href="#">กรัม</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    </br>
+                    <div class="row">
+                        <div class="col-4 text-right">
+                            <h5>วันที่ใส่ปุ๋ย:</h5>
+                        </div>
+                        <div class="col-8">
+                            <input id="inputdatepicker-compost2" class="datepicker" data-date-format="dd/mm/yyyy" readonly>
+                        </div>
+                    </div>
+                    </br>
+                    <input type="hidden" id="c_id" name="c_id" value="" >
+                    <input type="hidden" name="p_id" value="{{ plant.pk }}" >
+                    <input type="hidden" id="compost-type2" name="compost-type" value="" >
+                    <input type="hidden" id="compost-date2" name="compost-date" value="" >
+                    <input type="hidden" id="compost-unit2" name="compost-unit" value="" >
+                    {% csrf_token %}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+                <button type="button" id="submit-compost2"  class="btn btn-success">ตกลง</button>
+            </div>
+        </div>
+    </div>
+</div>
