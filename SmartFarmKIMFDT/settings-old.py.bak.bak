@@ -25,7 +25,7 @@ SECRET_KEY = '!r))=ve=*u)phtj#ex*jark0iu%*vpm1kyl2vnlg4+&$&iemu9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [u'KIMFDT.pythonanywhere.com']
+ALLOWED_HOSTS = ['18.217.147.213', 'http://newdeathnote.pythonanywhere.com/']
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 EMAIL_USE_TLS = True
@@ -60,7 +60,7 @@ MIDDLEWARE_CLASSES = [
     'smartfarm.middleware.AuthenticationChecking',
 ]
 
-ROOT_URLCONF = 'SmartFarmKIMFDT.urls'
+ROOT_URLCONF = 'smartfarm.urls'
 
 TEMPLATES = [
     {
@@ -78,7 +78,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'SmartFarmKIMFDT.wsgi.application'
+WSGI_APPLICATION = 'smartfarm.wsgi.application'
 
 
 # Database
@@ -128,8 +128,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-MEDIA_ROOT = u'/home/KIMFDT/SmartFarmKimFDT/media'
-MEDIA_URL = '/media/'
-STATIC_ROOT = u'/home/KIMFDT/SmartFarmKimFDT/static'
 STATIC_URL = '/static/'
+STATIC_ROOT = "/home/newdeathnote/smartfarm/static"
 
+FIXTURE_DIRS = (
+   '/smartfarm/fixtures/',
+)

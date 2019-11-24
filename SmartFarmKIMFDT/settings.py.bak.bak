@@ -78,7 +78,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'SmartFarmKIMFDT.wsgi.application'
+WSGI_APPLICATION = 'smartfarm.wsgi.application'
 
 
 # Database
