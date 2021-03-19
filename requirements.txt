@@ -1,6 +1,6 @@
 CacheControl==0.12.5
 Django==1.9
-Pillow==2.3.0
+Pillow==8.1.1
 SecretStorage==2.0.0
 argparse==1.2.1
 cachetools==3.0.0
