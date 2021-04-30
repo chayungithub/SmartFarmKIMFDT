@@ -38,7 +38,7 @@ pyparsing==2.0.1
 python-dateutil==1.5
 pytz==2012rc0
 requests==2.21.0
-rsa==4.0
+rsa==4.7
 scipy==0.13.3
 simplegeneric==0.8.1
 simplejson==3.3.1
